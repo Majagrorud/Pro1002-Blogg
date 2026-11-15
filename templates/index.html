@@ -9,6 +9,8 @@
         <article>
             <h2>{{ et_innlegg["tittel"] }}</h2>
             <p>{{ et_innlegg["dato"] }}</p>
+                        <p>{{ et_innlegg["dato"] }}</p>
+            <p>{{ et_innlegg["tekst"] | utdrag }}</p>
         </article>
     {% endfor %}
 {% endblock %}
