@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Min blogg{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('forside') }}">Min blogg</a>
+        <nav>
+            <a href="{{ url_for('forside') }}">Hjem</a>
+            <a href="#">+ Nytt innlegg</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
