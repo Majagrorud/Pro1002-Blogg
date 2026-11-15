@@ -25,4 +25,7 @@ def vis_innlegg(innlegg_id):
     if innlegg is None:
         abort(404)
     tagger = db.hent_tagger(innlegg_id)
-    return render_template("innlegg.html", innlegg=innlegg, tagger=tagger)
+    kommentarer = db.hent_kommentarer(innlegg_id)
+    return render_template(
+        "innlegg.html", innlegg=innlegg, tagger=tagger, kommentarer=kommentarer
+    )

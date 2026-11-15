@@ -33,3 +33,11 @@ def hent_innlegg(innlegg_id):
     ).fetchone()
     con.close()
     return innlegg
+def hent_kommentarer(innlegg_id):
+    con = hent_tilkobling()
+    kommentarer = con.execute(
+        "SELECT * FROM kommentarer WHERE innlegg_id = ? ORDER BY dato",
+        (innlegg_id,),
+    ).fetchall()
+    con.close()
+    return kommentarer

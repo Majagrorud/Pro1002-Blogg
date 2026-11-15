@@ -15,4 +15,18 @@
 
         <p>{{ innlegg["tekst"] }}</p>
     </article>
+        <section>
+        <h2>Kommentarer ({{ kommentarer|length }})</h2>
+
+        {% for kommentar in kommentarer %}
+            <div class="kommentar">
+                <h3>{{ kommentar["tittel"] }}</h3>
+                <p>{{ kommentar["dato"] }}</p>
+                <p>{{ kommentar["tekst"] }}</p>
+            </div>
+        {% else %}
+            <p>Ingen kommentarer ennå.</p>
+        {% endfor %}
+    </section>
 {% endblock %}
+ 
