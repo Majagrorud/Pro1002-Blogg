@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 import db
 
 app = Flask(__name__)
@@ -18,3 +18,11 @@ def forside():
     for et_innlegg in innlegg:
         tagger[et_innlegg["id"]] = db.hent_tagger(et_innlegg["id"])
     return render_template("index.html", innlegg=innlegg, tagger=tagger)
+
+@app.route("/innlegg/<int:innlegg_id>")
+def vis_innlegg(innlegg_id):
+    innlegg = db.hent_innlegg(innlegg_id)
+    if innlegg is None:
+        abort(404)
+    tagger = db.hent_tagger(innlegg_id)
+    return render_template("innlegg.html", innlegg=innlegg, tagger=tagger)

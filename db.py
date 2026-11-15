@@ -26,3 +26,10 @@ def hent_tagger(innlegg_id):
     ).fetchall()
     con.close()
     return tagger
+def hent_innlegg(innlegg_id):
+    con = hent_tilkobling()
+    innlegg = con.execute(
+        "SELECT * FROM innlegg WHERE id = ?", (innlegg_id,)
+    ).fetchone()
+    con.close()
+    return innlegg

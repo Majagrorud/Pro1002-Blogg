@@ -7,7 +7,7 @@
 
     {% for et_innlegg in innlegg %}
         <article>
-            <h2>{{ et_innlegg["tittel"] }}</h2>
+                       <h2><a href="{{ url_for('vis_innlegg', innlegg_id=et_innlegg['id']) }}">{{ et_innlegg["tittel"] }}</a></h2>
             <p>{{ et_innlegg["dato"] }}</p>
             <p>{{ et_innlegg["tekst"] | utdrag }}</p>
         </article>
