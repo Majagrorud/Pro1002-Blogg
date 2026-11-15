@@ -16,3 +16,10 @@ header {
 nav a {
     margin-left: 20px;
 }
+.tag {
+    background-color: #eee;
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin-right: 5px;
+    font-size: 14px;
+}

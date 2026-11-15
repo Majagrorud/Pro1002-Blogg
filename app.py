@@ -15,3 +15,11 @@ def lag_utdrag(tekst):
 def forside():
     innlegg = db.hent_alle_innlegg()
     return render_template("index.html", innlegg=innlegg)
+
+@app.route("/")
+def forside():
+    innlegg = db.hent_alle_innlegg()
+    tagger = {}
+    for et_innlegg in innlegg:
+        tagger[et_innlegg["id"]] = db.hent_tagger(et_innlegg["id"])
+    return render_template("index.html", innlegg=innlegg, tagger=tagger)
