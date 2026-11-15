@@ -4,5 +4,11 @@
 
 {% block content %}
     <h1>Alle innlegg</h1>
-    <p>Her kommer innleggene.</p>
+
+    {% for et_innlegg in innlegg %}
+        <article>
+            <h2>{{ et_innlegg["tittel"] }}</h2>
+            <p>{{ et_innlegg["dato"] }}</p>
+        </article>
+    {% endfor %}
 {% endblock %}
