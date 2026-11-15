@@ -48,3 +48,33 @@ Start ved Grünerløkka og gå oppover mot Nydalen. Halvveis ligger det flere ka
 'Da jeg fikk hund, oppdaget jeg fort hvor vanskelig det var å finne steder der vi begge var velkomne.
 
 Denne bloggen er min samling av tips og erfaringer, slik at flere hundeeiere tør å ta med seg hunden ut.');
+INSERT INTO tagger (id, navn) VALUES
+(1, 'hund'),
+(2, 'mat'),
+(3, 'oslo'),
+(4, 'tips'),
+(5, 'pizza'),
+(6, 'arrangement'),
+(7, 'kafe'),
+(8, 'oppskrift'),
+(9, 'tur');
+
+INSERT INTO innlegg_tagger (innlegg_id, tag_id) VALUES
+(1, 1), (1, 2), (1, 3), (1, 4),
+(2, 2), (2, 5), (2, 6),
+(3, 1), (3, 3), (3, 7),
+(4, 1), (4, 4),
+(5, 1), (5, 2), (5, 7),
+(6, 1), (6, 2), (6, 3),
+(7, 1), (7, 4),
+(8, 1), (8, 8),
+(9, 1), (9, 3), (9, 7), (9, 9),
+(10, 1), (10, 3);
+
+INSERT INTO kommentarer (innlegg_id, tittel, dato, tekst) VALUES
+(1, 'Hundecafe på Løkka', '2026-11-13', 'Takk for lista! Vi testet Kafe Pote i går, og hunden fikk både vannskål og kos.'),
+(1, 'Mat?', '2026-11-13', 'Har noen av disse stedene egen mat eller snacks til hund?'),
+(2, 'Gleder meg!', '2026-11-09', 'Vi kommer på åpningen. Er det greit å ta med to hunder?'),
+(3, 'Enig', '2026-11-03', 'Kafe Pote er helt fantastisk. Hunden min drar meg dit hver gang vi går forbi.'),
+(4, 'Gode tips', '2026-10-28', 'Teppet var et godt tips. Hunden min slappet mye bedre av med noe kjent å ligge på.'),
+(8, 'Testet oppskriften', '2026-09-30', 'Laget kjeksene i helgen, og de forsvant på en dag. Takk!');
