@@ -84,3 +84,15 @@ def lagre_innlegg(tittel, tekst):
     nytt_id = cur.lastrowid
     con.close()
     return nytt_id
+
+def lagre_tagger(innlegg_id, tagger):
+    con = hent_tilkobling()
+    for navn in tagger:
+        con.execute("INSERT OR IGNORE INTO tagger (navn) VALUES (?)", (navn,))
+        tag = con.execute("SELECT id FROM tagger WHERE navn = ?", (navn,)).fetchone()
+        con.execute(
+            "INSERT OR IGNORE INTO innlegg_tagger (innlegg_id, tag_id) VALUES (?, ?)",
+            (innlegg_id, tag["id"]),
+        )
+    con.commit()
+    con.close()

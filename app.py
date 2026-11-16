@@ -10,6 +10,7 @@ def lag_utdrag(tekst):
         return tekst[:150] + "..."
     return tekst
 
+
 def sjekk_kommentar(tittel, tekst):
     feil = []
     if tittel == "":
@@ -23,6 +24,15 @@ def sjekk_kommentar(tittel, tekst):
     return feil
 
 
+def les_tagger(tekst):
+    tagger = []
+    for bit in tekst.split(","):
+        navn = bit.strip().lower()
+        if navn != "" and navn not in tagger:
+            tagger.append(navn)
+    return tagger
+
+
 @app.route("/")
 def forside():
     innlegg = db.hent_alle_innlegg()
@@ -30,6 +40,7 @@ def forside():
     for et_innlegg in innlegg:
         tagger[et_innlegg["id"]] = db.hent_tagger(et_innlegg["id"])
     return render_template("index.html", innlegg=innlegg, tagger=tagger)
+
 
 @app.route("/innlegg/<int:innlegg_id>")
 def vis_innlegg(innlegg_id):
@@ -41,6 +52,8 @@ def vis_innlegg(innlegg_id):
     return render_template(
         "innlegg.html", innlegg=innlegg, tagger=tagger, kommentarer=kommentarer
     )
+
+
 @app.route("/tag/<tag_navn>")
 def vis_tag(tag_navn):
     innlegg = db.hent_innlegg_med_tag(tag_navn)
@@ -48,6 +61,7 @@ def vis_tag(tag_navn):
     for et_innlegg in innlegg:
         tagger[et_innlegg["id"]] = db.hent_tagger(et_innlegg["id"])
     return render_template("tag.html", tag_navn=tag_navn, innlegg=innlegg, tagger=tagger)
+
 
 @app.route("/innlegg/<int:innlegg_id>/kommentar", methods=["POST"])
 def ny_kommentar(innlegg_id):
@@ -75,12 +89,15 @@ def ny_kommentar(innlegg_id):
     db.lagre_kommentar(innlegg_id, tittel, tekst)
     return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
+
 @app.route("/innlegg/ny", methods=["GET", "POST"])
 def nytt_innlegg():
     if request.method == "POST":
         tittel = request.form["tittel"].strip()
         tekst = request.form["tekst"].strip()
+        tagger = les_tagger(request.form["tagger"])
         innlegg_id = db.lagre_innlegg(tittel, tekst)
+        db.lagre_tagger(innlegg_id, tagger)
         return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
     return render_template("skjema.html", overskrift="Nytt innlegg")
