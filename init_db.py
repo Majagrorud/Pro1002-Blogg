@@ -3,8 +3,8 @@ import sqlite3
 DATABASE = "blogg.db"
 
 
-def init_db():
-    con = sqlite3.connect(DATABASE)
+def init_db(database=DATABASE):
+    con = sqlite3.connect(database)
 
     with open("schema.sql", encoding="utf-8") as fil:
         con.executescript(fil.read())
