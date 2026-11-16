@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, request, redirect, url_for
 import db
 
 app = Flask(__name__)
@@ -36,3 +36,12 @@ def vis_tag(tag_navn):
     for et_innlegg in innlegg:
         tagger[et_innlegg["id"]] = db.hent_tagger(et_innlegg["id"])
     return render_template("tag.html", tag_navn=tag_navn, innlegg=innlegg, tagger=tagger)
+
+@app.route("/innlegg/<int:innlegg_id>/kommentar", methods=["POST"])
+def ny_kommentar(innlegg_id):
+    if db.hent_innlegg(innlegg_id) is None:
+        abort(404)
+    tittel = request.form["tittel"]
+    tekst = request.form["tekst"]
+    db.lagre_kommentar(innlegg_id, tittel, tekst)
+    return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))

@@ -27,6 +27,19 @@
         {% else %}
             <p>Ingen kommentarer ennå.</p>
         {% endfor %}
+
+                <h3>Skriv en kommentar</h3>
+        <form method="post" action="{{ url_for('ny_kommentar', innlegg_id=innlegg['id']) }}">
+            <p>
+                <label for="tittel">Tittel</label>
+                <input type="text" id="tittel" name="tittel">
+            </p>
+            <p>
+                <label for="tekst">Kommentar</label>
+                <textarea id="tekst" name="tekst" rows="5"></textarea>
+            </p>
+            <button type="submit">Send kommentar</button>
+        </form>
     </section>
 {% endblock %}
  

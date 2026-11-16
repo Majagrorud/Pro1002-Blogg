@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date
 
 DATABASE = "blogg.db"
 
@@ -61,3 +62,13 @@ def hent_innlegg_med_tag(tag_navn):
     ).fetchall()
     con.close()
     return innlegg
+
+def lagre_kommentar(innlegg_id, tittel, tekst):
+    dato = date.today().isoformat()
+    con = hent_tilkobling()
+    con.execute(
+        "INSERT INTO kommentarer (innlegg_id, tittel, dato, tekst) VALUES (?, ?, ?, ?)",
+        (innlegg_id, tittel, dato, tekst),
+    )
+    con.commit()
+    con.close()
