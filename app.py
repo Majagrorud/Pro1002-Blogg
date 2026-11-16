@@ -10,6 +10,18 @@ def lag_utdrag(tekst):
         return tekst[:150] + "..."
     return tekst
 
+def sjekk_kommentar(tittel, tekst):
+    feil = []
+    if tittel == "":
+        feil.append("Du må skrive en tittel.")
+    elif len(tittel) > 100:
+        feil.append("Tittelen kan ikke være lengre enn 100 tegn.")
+    if tekst == "":
+        feil.append("Du må skrive en kommentar.")
+    elif len(tekst) > 1000:
+        feil.append("Kommentaren kan ikke være lengre enn 1000 tegn.")
+    return feil
+
 
 @app.route("/")
 def forside():
@@ -39,9 +51,26 @@ def vis_tag(tag_navn):
 
 @app.route("/innlegg/<int:innlegg_id>/kommentar", methods=["POST"])
 def ny_kommentar(innlegg_id):
-    if db.hent_innlegg(innlegg_id) is None:
+    innlegg = db.hent_innlegg(innlegg_id)
+    if innlegg is None:
         abort(404)
-    tittel = request.form["tittel"]
-    tekst = request.form["tekst"]
+
+    tittel = request.form["tittel"].strip()
+    tekst = request.form["tekst"].strip()
+    feil = sjekk_kommentar(tittel, tekst)
+
+    if feil:
+        tagger = db.hent_tagger(innlegg_id)
+        kommentarer = db.hent_kommentarer(innlegg_id)
+        return render_template(
+            "innlegg.html",
+            innlegg=innlegg,
+            tagger=tagger,
+            kommentarer=kommentarer,
+            feil=feil,
+            tittel=tittel,
+            tekst=tekst,
+        ), 400
+
     db.lagre_kommentar(innlegg_id, tittel, tekst)
     return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
