@@ -5,6 +5,7 @@ DATABASE = "blogg.db"
 
 
 def hent_tilkobling():
+    """Åpner databasen og slår på fremmednøkler."""
     con = sqlite3.connect(DATABASE)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
@@ -12,6 +13,7 @@ def hent_tilkobling():
 
 
 def hent_alle_innlegg():
+    """Henter alle innlegg, nyeste først."""
     con = hent_tilkobling()
     innlegg = con.execute("SELECT * FROM innlegg ORDER BY dato DESC").fetchall()
     con.close()
@@ -19,6 +21,7 @@ def hent_alle_innlegg():
 
 
 def hent_tagger(innlegg_id):
+    """Henter taggene til ett innlegg, sortert etter navn."""
     con = hent_tilkobling()
     tagger = con.execute(
         "SELECT tagger.navn FROM tagger "
@@ -32,6 +35,7 @@ def hent_tagger(innlegg_id):
 
 
 def hent_innlegg(innlegg_id):
+    """Henter ett innlegg. Returnerer None hvis det ikke finnes."""
     con = hent_tilkobling()
     innlegg = con.execute(
         "SELECT * FROM innlegg WHERE id = ?", (innlegg_id,)
@@ -41,6 +45,7 @@ def hent_innlegg(innlegg_id):
 
 
 def hent_kommentarer(innlegg_id):
+    """Henter kommentarene til ett innlegg, eldste først."""
     con = hent_tilkobling()
     kommentarer = con.execute(
         "SELECT * FROM kommentarer WHERE innlegg_id = ? ORDER BY dato",
@@ -51,6 +56,7 @@ def hent_kommentarer(innlegg_id):
 
 
 def hent_innlegg_med_tag(tag_navn):
+    """Henter alle innlegg med en bestemt tag, nyeste først."""
     con = hent_tilkobling()
     innlegg = con.execute(
         "SELECT innlegg.* FROM innlegg "
@@ -63,7 +69,9 @@ def hent_innlegg_med_tag(tag_navn):
     con.close()
     return innlegg
 
+
 def lagre_kommentar(innlegg_id, tittel, tekst):
+    """Lagrer en ny kommentar med dagens dato."""
     dato = date.today().isoformat()
     con = hent_tilkobling()
     con.execute(
@@ -73,7 +81,9 @@ def lagre_kommentar(innlegg_id, tittel, tekst):
     con.commit()
     con.close()
 
+
 def lagre_innlegg(tittel, tekst):
+    """Lagrer et nytt innlegg med dagens dato. Returnerer id til innlegget."""
     dato = date.today().isoformat()
     con = hent_tilkobling()
     cur = con.execute(
@@ -85,7 +95,9 @@ def lagre_innlegg(tittel, tekst):
     con.close()
     return nytt_id
 
+
 def lagre_tagger(innlegg_id, tagger):
+    """Lagrer taggene og kobler dem til innlegget."""
     con = hent_tilkobling()
     for navn in tagger:
         con.execute("INSERT OR IGNORE INTO tagger (navn) VALUES (?)", (navn,))
@@ -94,11 +106,12 @@ def lagre_tagger(innlegg_id, tagger):
             "INSERT OR IGNORE INTO innlegg_tagger (innlegg_id, tag_id) VALUES (?, ?)",
             (innlegg_id, tag["id"]),
         )
-        
     con.commit()
     con.close()
 
+
 def oppdater_innlegg(innlegg_id, tittel, tekst):
+    """Endrer tittel og tekst på et innlegg."""
     con = hent_tilkobling()
     con.execute(
         "UPDATE innlegg SET tittel = ?, tekst = ? WHERE id = ?",
@@ -109,6 +122,7 @@ def oppdater_innlegg(innlegg_id, tittel, tekst):
 
 
 def fjern_tagger(innlegg_id):
+    """Fjerner alle taggene fra et innlegg."""
     con = hent_tilkobling()
     con.execute("DELETE FROM innlegg_tagger WHERE innlegg_id = ?", (innlegg_id,))
     con.commit()
