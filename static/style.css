@@ -58,3 +58,10 @@ button {
     border-radius: 4px;
     padding: 5px 15px;
 }
+
+.melding {
+    color: #1a5e2a;
+    background-color: #e6f4e8;
+    border-radius: 4px;
+    padding: 10px 15px;
+}

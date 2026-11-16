@@ -1,7 +1,10 @@
-from flask import Flask, render_template, abort, request, redirect, url_for
+import os
+
+from flask import Flask, render_template, abort, request, redirect, url_for, flash
 import db
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "bare-for-utvikling")
 
 
 @app.template_filter("utdrag")
@@ -31,6 +34,7 @@ def les_tagger(tekst):
         if navn != "" and navn not in tagger:
             tagger.append(navn)
     return tagger
+
 
 def sjekk_innlegg(tittel, tekst):
     feil = []
@@ -97,6 +101,7 @@ def ny_kommentar(innlegg_id):
         ), 400
 
     db.lagre_kommentar(innlegg_id, tittel, tekst)
+    flash("Kommentaren er lagret.")
     return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
 
@@ -120,9 +125,11 @@ def nytt_innlegg():
 
         innlegg_id = db.lagre_innlegg(tittel, tekst)
         db.lagre_tagger(innlegg_id, les_tagger(tagger_tekst))
+        flash("Innlegget er lagret.")
         return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
     return render_template("skjema.html", overskrift="Nytt innlegg")
+
 
 @app.route("/innlegg/<int:innlegg_id>/rediger", methods=["GET", "POST"])
 def rediger_innlegg(innlegg_id):
@@ -149,6 +156,7 @@ def rediger_innlegg(innlegg_id):
         db.oppdater_innlegg(innlegg_id, tittel, tekst)
         db.fjern_tagger(innlegg_id)
         db.lagre_tagger(innlegg_id, les_tagger(tagger_tekst))
+        flash("Innlegget er oppdatert.")
         return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
     navn = []
@@ -163,6 +171,7 @@ def rediger_innlegg(innlegg_id):
         tekst=innlegg["tekst"],
         tagger_tekst=tagger_tekst,
     )
+
 
 @app.errorhandler(404)
 def side_finnes_ikke(feil):

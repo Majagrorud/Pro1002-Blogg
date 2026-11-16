@@ -17,5 +17,8 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+            {% for melding in get_flashed_messages() %}
+            <p class="melding" role="status">{{ melding }}</p>
+        {% endfor %}
 </body>
 </html>

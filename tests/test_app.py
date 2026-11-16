@@ -105,4 +105,10 @@ class TestApp(unittest.TestCase):
         self.assertEqual(svar.status_code, 404)
         self.assertIn("Fant ikke siden", svar.text)
 
-        
+    def test_bekreftelse_vises_etter_kommentar(self):
+        svar = self.klient.post(
+            "/innlegg/5/kommentar",
+            data={"tittel": "Hei", "tekst": "Fin tekst"},
+            follow_redirects=True,
+        )
+        self.assertIn("Kommentaren er lagret.", svar.text)
