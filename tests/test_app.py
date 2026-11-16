@@ -124,3 +124,8 @@ class TestApp(unittest.TestCase):
         self.assertIn("Innlegget er slettet.", svar.text)
         self.assertIsNone(db.hent_innlegg(1))
         self.assertEqual(len(db.hent_kommentarer(1)), 0)
+
+    def test_slett_kommentar(self):
+        svar = self.klient.post("/kommentar/1/slett", follow_redirects=True)
+        self.assertIn("Kommentaren er slettet.", svar.text)
+        self.assertEqual(len(db.hent_kommentarer(1)), 1)

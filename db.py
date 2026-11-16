@@ -136,3 +136,20 @@ def slett_innlegg(innlegg_id):
     con.execute("DELETE FROM innlegg WHERE id = ?", (innlegg_id,))
     con.commit()
     con.close()
+
+def hent_kommentar(kommentar_id):
+    """Henter én kommentar. Returnerer None hvis den ikke finnes."""
+    con = hent_tilkobling()
+    kommentar = con.execute(
+        "SELECT * FROM kommentarer WHERE id = ?", (kommentar_id,)
+    ).fetchone()
+    con.close()
+    return kommentar
+
+
+def slett_kommentar(kommentar_id):
+    """Sletter én kommentar."""
+    con = hent_tilkobling()
+    con.execute("DELETE FROM kommentarer WHERE id = ?", (kommentar_id,))
+    con.commit()
+    con.close()

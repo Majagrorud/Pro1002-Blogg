@@ -189,3 +189,12 @@ def slett_innlegg(innlegg_id):
         return redirect(url_for("forside"))
 
     return render_template("slett.html", innlegg=innlegg)
+
+@app.route("/kommentar/<int:kommentar_id>/slett", methods=["POST"])
+def slett_kommentar(kommentar_id):
+    kommentar = db.hent_kommentar(kommentar_id)
+    if kommentar is None:
+        abort(404)
+    db.slett_kommentar(kommentar_id)
+    flash("Kommentaren er slettet.")
+    return redirect(url_for("vis_innlegg", innlegg_id=kommentar["innlegg_id"]))

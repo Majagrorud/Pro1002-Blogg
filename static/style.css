@@ -74,3 +74,12 @@ button {
 .slett-lenke {
     color: #a31a1a;
 }
+
+button.slett-lenke {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    text-decoration: underline;
+    cursor: pointer;
+}
