@@ -123,3 +123,43 @@ def nytt_innlegg():
         return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
     return render_template("skjema.html", overskrift="Nytt innlegg")
+
+@app.route("/innlegg/<int:innlegg_id>/rediger", methods=["GET", "POST"])
+def rediger_innlegg(innlegg_id):
+    innlegg = db.hent_innlegg(innlegg_id)
+    if innlegg is None:
+        abort(404)
+
+    if request.method == "POST":
+        tittel = request.form["tittel"].strip()
+        tekst = request.form["tekst"].strip()
+        tagger_tekst = request.form["tagger"]
+        feil = sjekk_innlegg(tittel, tekst)
+
+        if feil:
+            return render_template(
+                "skjema.html",
+                overskrift="Rediger innlegg",
+                feil=feil,
+                tittel=tittel,
+                tekst=tekst,
+                tagger_tekst=tagger_tekst,
+            ), 400
+
+        db.oppdater_innlegg(innlegg_id, tittel, tekst)
+        db.fjern_tagger(innlegg_id)
+        db.lagre_tagger(innlegg_id, les_tagger(tagger_tekst))
+        return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
+
+    navn = []
+    for tag in db.hent_tagger(innlegg_id):
+        navn.append(tag["navn"])
+    tagger_tekst = ", ".join(navn)
+
+    return render_template(
+        "skjema.html",
+        overskrift="Rediger innlegg",
+        tittel=innlegg["tittel"],
+        tekst=innlegg["tekst"],
+        tagger_tekst=tagger_tekst,
+    )

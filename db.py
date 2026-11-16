@@ -94,5 +94,22 @@ def lagre_tagger(innlegg_id, tagger):
             "INSERT OR IGNORE INTO innlegg_tagger (innlegg_id, tag_id) VALUES (?, ?)",
             (innlegg_id, tag["id"]),
         )
+        
+    con.commit()
+    con.close()
+
+def oppdater_innlegg(innlegg_id, tittel, tekst):
+    con = hent_tilkobling()
+    con.execute(
+        "UPDATE innlegg SET tittel = ?, tekst = ? WHERE id = ?",
+        (tittel, tekst, innlegg_id),
+    )
+    con.commit()
+    con.close()
+
+
+def fjern_tagger(innlegg_id):
+    con = hent_tilkobling()
+    con.execute("DELETE FROM innlegg_tagger WHERE innlegg_id = ?", (innlegg_id,))
     con.commit()
     con.close()

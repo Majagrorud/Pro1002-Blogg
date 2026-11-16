@@ -5,7 +5,10 @@
 {% block content %}
     <article>
         <h1>{{ innlegg["tittel"] }}</h1>
-        <p>{{ innlegg["dato"] }}</p>
+               <p>
+            {{ innlegg["dato"] }} ·
+            <a href="{{ url_for('rediger_innlegg', innlegg_id=innlegg['id']) }}">Rediger innlegg</a>
+        </p>
 
         <p>
             {% for tag in tagger %}
