@@ -163,3 +163,7 @@ def rediger_innlegg(innlegg_id):
         tekst=innlegg["tekst"],
         tagger_tekst=tagger_tekst,
     )
+
+@app.errorhandler(404)
+def side_finnes_ikke(feil):
+    return render_template("404.html"), 404

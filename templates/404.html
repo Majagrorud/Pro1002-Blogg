@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Fant ikke siden{% endblock %}
+
+{% block content %}
+    <h1>404 Fant ikke siden</h1>
+    <p>Innlegget du leter etter, finnes ikke eller er slettet.</p>
+    <p><a href="{{ url_for('forside') }}">Gå tilbake til forsiden</a></p>
+{% endblock %}

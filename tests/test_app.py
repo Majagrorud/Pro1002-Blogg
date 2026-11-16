@@ -99,3 +99,10 @@ class TestApp(unittest.TestCase):
         utdrag = lag_utdrag("a" * 200)
         self.assertEqual(len(utdrag), 153)
         self.assertTrue(utdrag.endswith("..."))
+
+    def test_404_side_har_egen_tekst(self):
+        svar = self.klient.get("/finnes/ikke")
+        self.assertEqual(svar.status_code, 404)
+        self.assertIn("Fant ikke siden", svar.text)
+
+        
