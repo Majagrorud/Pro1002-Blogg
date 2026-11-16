@@ -127,3 +127,12 @@ def fjern_tagger(innlegg_id):
     con.execute("DELETE FROM innlegg_tagger WHERE innlegg_id = ?", (innlegg_id,))
     con.commit()
     con.close()
+
+def slett_innlegg(innlegg_id):
+    """Sletter et innlegg med kommentarer og taggkoblinger."""
+    con = hent_tilkobling()
+    con.execute("DELETE FROM kommentarer WHERE innlegg_id = ?", (innlegg_id,))
+    con.execute("DELETE FROM innlegg_tagger WHERE innlegg_id = ?", (innlegg_id,))
+    con.execute("DELETE FROM innlegg WHERE id = ?", (innlegg_id,))
+    con.commit()
+    con.close()

@@ -7,7 +7,8 @@
         <h1>{{ innlegg["tittel"] }}</h1>
         <p>
             {{ innlegg["dato"] }} ·
-            <a href="{{ url_for('rediger_innlegg', innlegg_id=innlegg['id']) }}">Rediger innlegg</a>
+                       <a href="{{ url_for('rediger_innlegg', innlegg_id=innlegg['id']) }}">Rediger innlegg</a> ·
+            <a class="slett-lenke" href="{{ url_for('slett_innlegg', innlegg_id=innlegg['id']) }}">Slett innlegg</a>
         </p>
 
         <p>

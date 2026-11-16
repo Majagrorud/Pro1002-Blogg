@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Slett innlegg{% endblock %}
+
+{% block content %}
+    <h1>Slett innlegg?</h1>
+    <p>
+        Er du sikker på at du vil slette «{{ innlegg["tittel"] }}»?
+        Kommentarene til innlegget blir også slettet. Dette kan ikke angres.
+    </p>
+
+    <form method="post">
+        <button type="submit" class="slett-knapp">Ja, slett innlegget</button>
+        <a href="{{ url_for('vis_innlegg', innlegg_id=innlegg['id']) }}">Avbryt</a>
+    </form>
+{% endblock %}

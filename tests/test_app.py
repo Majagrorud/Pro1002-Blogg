@@ -112,3 +112,15 @@ class TestApp(unittest.TestCase):
             follow_redirects=True,
         )
         self.assertIn("Kommentaren er lagret.", svar.text)
+
+    def test_bekreftelsesside_sletter_ikke(self):
+        svar = self.klient.get("/innlegg/1/slett")
+        self.assertEqual(svar.status_code, 200)
+        self.assertIn("Slett innlegg?", svar.text)
+        self.assertIsNotNone(db.hent_innlegg(1))
+
+    def test_slett_innlegg(self):
+        svar = self.klient.post("/innlegg/1/slett", follow_redirects=True)
+        self.assertIn("Innlegget er slettet.", svar.text)
+        self.assertIsNone(db.hent_innlegg(1))
+        self.assertEqual(len(db.hent_kommentarer(1)), 0)
