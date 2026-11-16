@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Taggen {{ tag_navn }}{% endblock %}
+
+{% block content %}
+    <h1>Innlegg med taggen <span class="tag">{{ tag_navn }}</span></h1>
+
+    {% for et_innlegg in innlegg %}
+        <article>
+            <h2><a href="{{ url_for('vis_innlegg', innlegg_id=et_innlegg['id']) }}">{{ et_innlegg["tittel"] }}</a></h2>
+            <p>{{ et_innlegg["dato"] }}</p>
+            <p>{{ et_innlegg["tekst"] | utdrag }}</p>
+            <p>
+                {% for tag in tagger[et_innlegg["id"]] %}
+                    <a class="tag" href="{{ url_for('vis_tag', tag_navn=tag['navn']) }}">{{ tag["navn"] }}</a>
+                {% endfor %}
+            </p>
+        </article>
+    {% else %}
+        <p>Ingen innlegg med denne taggen.</p>
+    {% endfor %}
+{% endblock %}

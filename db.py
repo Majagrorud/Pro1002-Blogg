@@ -15,6 +15,8 @@ def hent_alle_innlegg():
     innlegg = con.execute("SELECT * FROM innlegg ORDER BY dato DESC").fetchall()
     con.close()
     return innlegg
+
+
 def hent_tagger(innlegg_id):
     con = hent_tilkobling()
     tagger = con.execute(
@@ -26,6 +28,8 @@ def hent_tagger(innlegg_id):
     ).fetchall()
     con.close()
     return tagger
+
+
 def hent_innlegg(innlegg_id):
     con = hent_tilkobling()
     innlegg = con.execute(
@@ -33,6 +37,8 @@ def hent_innlegg(innlegg_id):
     ).fetchone()
     con.close()
     return innlegg
+
+
 def hent_kommentarer(innlegg_id):
     con = hent_tilkobling()
     kommentarer = con.execute(
@@ -41,3 +47,17 @@ def hent_kommentarer(innlegg_id):
     ).fetchall()
     con.close()
     return kommentarer
+
+
+def hent_innlegg_med_tag(tag_navn):
+    con = hent_tilkobling()
+    innlegg = con.execute(
+        "SELECT innlegg.* FROM innlegg "
+        "JOIN innlegg_tagger ON innlegg.id = innlegg_tagger.innlegg_id "
+        "JOIN tagger ON tagger.id = innlegg_tagger.tag_id "
+        "WHERE tagger.navn = ? "
+        "ORDER BY innlegg.dato DESC",
+        (tag_navn,),
+    ).fetchall()
+    con.close()
+    return innlegg

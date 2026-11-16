@@ -9,7 +9,7 @@
 
         <p>
             {% for tag in tagger %}
-                <span class="tag">{{ tag["navn"] }}</span>
+               <a class="tag" href="{{ url_for('vis_tag', tag_navn=tag['navn']) }}">{{ tag["navn"] }}</a>
             {% endfor %}
         </p>
 

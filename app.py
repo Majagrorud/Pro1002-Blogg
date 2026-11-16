@@ -29,3 +29,10 @@ def vis_innlegg(innlegg_id):
     return render_template(
         "innlegg.html", innlegg=innlegg, tagger=tagger, kommentarer=kommentarer
     )
+@app.route("/tag/<tag_navn>")
+def vis_tag(tag_navn):
+    innlegg = db.hent_innlegg_med_tag(tag_navn)
+    tagger = {}
+    for et_innlegg in innlegg:
+        tagger[et_innlegg["id"]] = db.hent_tagger(et_innlegg["id"])
+    return render_template("tag.html", tag_navn=tag_navn, innlegg=innlegg, tagger=tagger)
