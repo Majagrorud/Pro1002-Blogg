@@ -72,3 +72,15 @@ def lagre_kommentar(innlegg_id, tittel, tekst):
     )
     con.commit()
     con.close()
+
+def lagre_innlegg(tittel, tekst):
+    dato = date.today().isoformat()
+    con = hent_tilkobling()
+    cur = con.execute(
+        "INSERT INTO innlegg (tittel, dato, tekst) VALUES (?, ?, ?)",
+        (tittel, dato, tekst),
+    )
+    con.commit()
+    nytt_id = cur.lastrowid
+    con.close()
+    return nytt_id

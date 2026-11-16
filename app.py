@@ -74,3 +74,13 @@ def ny_kommentar(innlegg_id):
 
     db.lagre_kommentar(innlegg_id, tittel, tekst)
     return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
+
+@app.route("/innlegg/ny", methods=["GET", "POST"])
+def nytt_innlegg():
+    if request.method == "POST":
+        tittel = request.form["tittel"].strip()
+        tekst = request.form["tekst"].strip()
+        innlegg_id = db.lagre_innlegg(tittel, tekst)
+        return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
+
+    return render_template("skjema.html", overskrift="Nytt innlegg")

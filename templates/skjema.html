@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ overskrift }}{% endblock %}
+
+{% block content %}
+    <h1>{{ overskrift }}</h1>
+
+    <form method="post">
+        <p>
+            <label for="tittel">Tittel</label>
+            <input type="text" id="tittel" name="tittel">
+        </p>
+        <p>
+            <label for="tekst">Tekst</label>
+            <textarea id="tekst" name="tekst" rows="12"></textarea>
+        </p>
+        <button type="submit">Lagre innlegg</button>
+    </form>
+{% endblock %}
