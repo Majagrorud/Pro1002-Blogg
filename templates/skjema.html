@@ -5,18 +5,26 @@
 {% block content %}
     <h1>{{ overskrift }}</h1>
 
+    {% if feil %}
+        <div class="feil" role="alert">
+            {% for melding in feil %}
+                <p>{{ melding }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form method="post">
         <p>
             <label for="tittel">Tittel</label>
-            <input type="text" id="tittel" name="tittel">
+            <input type="text" id="tittel" name="tittel" value="{{ tittel }}">
         </p>
         <p>
             <label for="tekst">Tekst</label>
-            <textarea id="tekst" name="tekst" rows="12"></textarea>
+            <textarea id="tekst" name="tekst" rows="12">{{ tekst }}</textarea>
         </p>
-                <p>
+        <p>
             <label for="tagger">Tagger</label>
-            <input type="text" id="tagger" name="tagger" aria-describedby="tagger-hjelp">
+            <input type="text" id="tagger" name="tagger" value="{{ tagger_tekst }}" aria-describedby="tagger-hjelp">
             <small id="tagger-hjelp">Skill taggene med komma, for eksempel: hund, mat, oslo</small>
         </p>
         <button type="submit">Lagre innlegg</button>

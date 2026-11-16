@@ -32,6 +32,16 @@ def les_tagger(tekst):
             tagger.append(navn)
     return tagger
 
+def sjekk_innlegg(tittel, tekst):
+    feil = []
+    if tittel == "":
+        feil.append("Du må skrive en tittel.")
+    elif len(tittel) > 150:
+        feil.append("Tittelen kan ikke være lengre enn 150 tegn.")
+    if tekst == "":
+        feil.append("Du må skrive en tekst.")
+    return feil
+
 
 @app.route("/")
 def forside():
@@ -95,9 +105,21 @@ def nytt_innlegg():
     if request.method == "POST":
         tittel = request.form["tittel"].strip()
         tekst = request.form["tekst"].strip()
-        tagger = les_tagger(request.form["tagger"])
+        tagger_tekst = request.form["tagger"]
+        feil = sjekk_innlegg(tittel, tekst)
+
+        if feil:
+            return render_template(
+                "skjema.html",
+                overskrift="Nytt innlegg",
+                feil=feil,
+                tittel=tittel,
+                tekst=tekst,
+                tagger_tekst=tagger_tekst,
+            ), 400
+
         innlegg_id = db.lagre_innlegg(tittel, tekst)
-        db.lagre_tagger(innlegg_id, tagger)
+        db.lagre_tagger(innlegg_id, les_tagger(tagger_tekst))
         return redirect(url_for("vis_innlegg", innlegg_id=innlegg_id))
 
     return render_template("skjema.html", overskrift="Nytt innlegg")
