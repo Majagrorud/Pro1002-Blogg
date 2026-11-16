@@ -11,7 +11,9 @@ Appen er laget med Python, Flask, Jinja2 og SQLite. Stedene som omtales i eksemp
 - Skjema for nye kommentarer, med validering
 - Taggside som viser alle innlegg med en bestemt tag
 - Lage og redigere innlegg, med tagger
-- 404 når et innlegg ikke finnes
+- Slette innlegg, med en egen side for å bekrefte, og slette kommentarer
+- Bekreftelsesmeldinger etter at noe er lagret, endret eller slettet
+- Egen 404 side når en side eller et innlegg ikke finnes
 
 ## Installasjon
 
@@ -73,6 +75,8 @@ flask --app app run --debug --port 5001
 - **Kommentere:** Fyll ut skjemaet nederst på et innlegg og trykk «Send kommentar».
 - **Skrive nytt innlegg:** Klikk på «+ Nytt innlegg» i menyen. Skriv taggene med komma mellom, for eksempel: hund, mat, oslo.
 - **Redigere innlegg:** Klikk på «Rediger innlegg» under tittelen på et innlegg.
+- **Slette innlegg:** Klikk på «Slett innlegg» under tittelen, og bekreft med «Ja, slett innlegget».
+- **Slette kommentar:** Klikk på «Slett kommentar» under kommentaren.
 
 ## Kjøre testene
 
@@ -85,7 +89,7 @@ Testene bruker en egen testdatabase (`test_blogg.db`), som lages før hver test 
 | Fil | Hva den tester |
 | --- | --- |
 | `tests/test_db.py` | Integrasjonstester: at funksjonene i `db.py` leser og skriver riktig i databasen |
-| `tests/test_app.py` | Ende til ende tester: sidene, skjemaene, validering, 404 og beskyttelse mot script injection, med Flask sin testklient |
+| `tests/test_app.py` | Ende til ende tester med Flask sin testklient: sidene, skjemaene, validering, sletting, bekreftelsesmeldinger, 404 og beskyttelse mot script injection |
 
 ## Sider og HTTP metoder
 
@@ -98,9 +102,12 @@ Testene bruker en egen testdatabase (`test_blogg.db`), som lages før hver test 
 | `/innlegg/ny` | POST | Lagrer det nye innlegget |
 | `/innlegg/<id>/rediger` | GET | Viser skjemaet, ferdig utfylt |
 | `/innlegg/<id>/rediger` | POST | Lagrer endringene |
+| `/innlegg/<id>/slett` | GET | Viser siden der man bekrefter sletting |
+| `/innlegg/<id>/slett` | POST | Sletter innlegget og kommentarene til det |
+| `/kommentar/<id>/slett` | POST | Sletter en kommentar |
 | `/tag/<navn>` | GET | Viser alle innlegg med en bestemt tag |
 
-GET brukes bare til å vise sider. POST brukes til alt som endrer databasen, og etter en vellykket POST sendes brukeren videre med redirect (Post/Redirect/Get).
+GET brukes bare til å vise sider. POST brukes til alt som endrer databasen, også sletting, og etter en vellykket POST sendes brukeren videre med redirect (Post/Redirect/Get).
 
 ## Databasen
 
@@ -133,7 +140,7 @@ erDiagram
     }
 ```
 
-Tabellen `innlegg_tagger` kobler innlegg og tagger, fordi ett innlegg kan ha mange tagger, og én tag kan høre til mange innlegg.
+Tabellen `innlegg_tagger` kobler innlegg og tagger, fordi ett innlegg kan ha mange tagger, og én tag kan høre til mange innlegg. Når et innlegg slettes, slettes også kommentarene og taggkoblingene, slik at fremmednøklene aldri peker på noe som ikke finnes.
 
 ## Prosjektstruktur
 
@@ -155,18 +162,20 @@ tests/            Automatiske tester
 - Ved feil vises en feilmelding, det brukeren skrev, blir stående, og serveren svarer med statuskode 400.
 - Alle SQL spørringer bruker parametere (`?`), som beskytter mot SQL injection.
 - Jinja2 escaper alt innhold automatisk, som beskytter mot script injection. Dette er testet i `test_script_i_kommentar_blir_escapet`.
+- Sletting skjer bare med POST, aldri med en vanlig lenke.
+- Den hemmelige nøkkelen som bekreftelsesmeldingene trenger, hentes fra miljøvariabelen `SECRET_KEY`.
 
 ## Kjente begrensninger
 
-- Ingen innlogging, så alle kan lage og redigere innlegg.
+- Ingen innlogging, så alle kan lage, redigere og slette innlegg.
 - Ingen beskyttelse mot CSRF.
-- Det er ikke mulig å slette innlegg eller kommentarer.
+- Kommentarer slettes uten en egen side for å bekrefte.
+- Er `SECRET_KEY` ikke satt, brukes en nøkkel som bare er ment for utvikling.
 - Tagger som ikke lenger brukes av noe innlegg, blir liggende i databasen.
 
 ## Mulige forbedringer
 
-- Innlogging, slik at bare eieren av bloggen kan skrive og redigere innlegg
-- Sletting av innlegg og kommentarer
+- Innlogging, slik at bare eieren av bloggen kan skrive, redigere og slette
 - Bilder i innlegg
 - Søk og en liste over mest leste innlegg
 - Design tilpasset mobil
