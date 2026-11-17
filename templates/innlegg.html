@@ -7,7 +7,7 @@
         <h1>{{ innlegg["tittel"] }}</h1>
         <p>
             {{ innlegg["dato"] }} ·
-                       <a href="{{ url_for('rediger_innlegg', innlegg_id=innlegg['id']) }}">Rediger innlegg</a> ·
+            <a href="{{ url_for('rediger_innlegg', innlegg_id=innlegg['id']) }}">Rediger innlegg</a> ·
             <a class="slett-lenke" href="{{ url_for('slett_innlegg', innlegg_id=innlegg['id']) }}">Slett innlegg</a>
         </p>
 
@@ -27,7 +27,8 @@
             <div class="kommentar">
                 <h3>{{ kommentar["tittel"] }}</h3>
                 <p>{{ kommentar["dato"] }}</p>
-                               <form method="post" action="{{ url_for('slett_kommentar', kommentar_id=kommentar['id']) }}">
+                <p>{{ kommentar["tekst"] }}</p>
+                <form method="post" action="{{ url_for('slett_kommentar', kommentar_id=kommentar['id']) }}">
                     <button type="submit" class="slett-lenke">Slett kommentar</button>
                 </form>
             </div>

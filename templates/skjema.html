@@ -16,7 +16,7 @@
     <form method="post">
         <p>
             <label for="tittel">Tittel</label>
-            <input type="text" id="tittel" name="tittel" value="{{ tittel }}">
+            <input type="text" id="tittel" name="tittel" value="{{ tittel }}" maxlength="150">
         </p>
         <p>
             <label for="tekst">Tekst</label>
@@ -24,7 +24,7 @@
         </p>
         <p>
             <label for="tagger">Tagger</label>
-                       <input type="text" id="tittel" name="tittel" value="{{ tittel }}" maxlength="150">
+            <input type="text" id="tagger" name="tagger" value="{{ tagger_tekst }}" aria-describedby="tagger-hjelp">
             <small id="tagger-hjelp">Skill taggene med komma, for eksempel: hund, mat, oslo</small>
         </p>
         <button type="submit">Lagre innlegg</button>
