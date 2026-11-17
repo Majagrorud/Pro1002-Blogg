@@ -129,3 +129,7 @@ class TestApp(unittest.TestCase):
         svar = self.klient.post("/kommentar/1/slett", follow_redirects=True)
         self.assertIn("Kommentaren er slettet.", svar.text)
         self.assertEqual(len(db.hent_kommentarer(1)), 1)
+
+    def test_innlegg_har_knapp_for_aa_slette_kommentar(self):
+        svar = self.klient.get("/innlegg/1")
+        self.assertIn("Slett kommentar", svar.text)
