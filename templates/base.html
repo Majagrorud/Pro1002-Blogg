@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Min blogg{% endblock %}</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
         <a href="{{ url_for('forside') }}">Min blogg</a>
         <nav>
             <a href="{{ url_for('forside') }}">Hjem</a>
-                  <a href="{{ url_for('nytt_innlegg') }}">+ Nytt innlegg</a>
+            <a href="{{ url_for('nytt_innlegg') }}">+ Nytt innlegg</a>
         </nav>
     </header>
 
     <main>
-        {% block content %}{% endblock %}
-    </main>
-            {% for melding in get_flashed_messages() %}
+        {% for melding in get_flashed_messages() %}
             <p class="melding" role="status">{{ melding }}</p>
         {% endfor %}
+
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
