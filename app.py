@@ -177,11 +177,13 @@ def rediger_innlegg(innlegg_id):
 def side_finnes_ikke(feil):
     return render_template("404.html"), 404
 
+
 @app.route("/innlegg/<int:innlegg_id>/slett", methods=["GET", "POST"])
 def slett_innlegg(innlegg_id):
     innlegg = db.hent_innlegg(innlegg_id)
     if innlegg is None:
         abort(404)
+
 
     if request.method == "POST":
         db.slett_innlegg(innlegg_id)
@@ -189,6 +191,7 @@ def slett_innlegg(innlegg_id):
         return redirect(url_for("forside"))
 
     return render_template("slett.html", innlegg=innlegg)
+
 
 @app.route("/kommentar/<int:kommentar_id>/slett", methods=["POST"])
 def slett_kommentar(kommentar_id):
