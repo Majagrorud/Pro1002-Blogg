@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Rediger kommentar{% endblock %}
+
+{% block content %}
+    <h1>Rediger kommentar</h1>
+
+    {% if feil %}
+        <div class="feil" role="alert">
+            {% for melding in feil %}
+                <p>{{ melding }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        <p>
+            <label for="tittel">Tittel</label>
+            <input type="text" id="tittel" name="tittel" value="{{ tittel }}" maxlength="100">
+        </p>
+        <p>
+            <label for="tekst">Kommentar</label>
+            <textarea id="tekst" name="tekst" rows="5" maxlength="1000">{{ tekst }}</textarea>
+        </p>
+        <button type="submit">Lagre kommentar</button>
+        <a href="{{ url_for('vis_innlegg', innlegg_id=kommentar['innlegg_id']) }}">Avbryt</a>
+    </form>
+{% endblock %}

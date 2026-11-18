@@ -201,3 +201,34 @@ def slett_kommentar(kommentar_id):
     db.slett_kommentar(kommentar_id)
     flash("Kommentaren er slettet.")
     return redirect(url_for("vis_innlegg", innlegg_id=kommentar["innlegg_id"]))
+
+@app.route("/kommentar/<int:kommentar_id>/rediger", methods=["GET", "POST"])
+def rediger_kommentar(kommentar_id):
+    kommentar = db.hent_kommentar(kommentar_id)
+    if kommentar is None:
+        abort(404)
+
+    if request.method == "POST":
+        tittel = request.form["tittel"].strip()
+        tekst = request.form["tekst"].strip()
+        feil = sjekk_kommentar(tittel, tekst)
+
+        if feil:
+            return render_template(
+                "rediger_kommentar.html",
+                kommentar=kommentar,
+                feil=feil,
+                tittel=tittel,
+                tekst=tekst,
+            ), 400
+
+        db.oppdater_kommentar(kommentar_id, tittel, tekst)
+        flash("Kommentaren er oppdatert.")
+        return redirect(url_for("vis_innlegg", innlegg_id=kommentar["innlegg_id"]))
+
+    return render_template(
+        "rediger_kommentar.html",
+        kommentar=kommentar,
+        tittel=kommentar["tittel"],
+        tekst=kommentar["tekst"],
+    )
