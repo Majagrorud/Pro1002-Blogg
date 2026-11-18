@@ -11,7 +11,8 @@ Appen er laget med Python, Flask, Jinja2 og SQLite. Stedene som omtales i eksemp
 - Skjema for nye kommentarer, med validering
 - Taggside som viser alle innlegg med en bestemt tag
 - Lage og redigere innlegg, med tagger
-- Slette innlegg, med en egen side for å bekrefte, og slette kommentarer
+- Slette innlegg, med en egen side for å bekrefte
+- Redigere og slette kommentarer
 - Bekreftelsesmeldinger etter at noe er lagret, endret eller slettet
 - Egen 404 side når en side eller et innlegg ikke finnes
 
@@ -76,6 +77,7 @@ flask --app app run --debug --port 5001
 - **Skrive nytt innlegg:** Klikk på «+ Nytt innlegg» i menyen. Skriv taggene med komma mellom, for eksempel: hund, mat, oslo.
 - **Redigere innlegg:** Klikk på «Rediger innlegg» under tittelen på et innlegg.
 - **Slette innlegg:** Klikk på «Slett innlegg» under tittelen, og bekreft med «Ja, slett innlegget».
+- **Redigere kommentar:** Klikk på «Rediger kommentar» under kommentaren, gjør endringene og trykk «Lagre kommentar».
 - **Slette kommentar:** Klikk på «Slett kommentar» under kommentaren.
 
 ## Kjøre testene
@@ -89,7 +91,7 @@ Testene bruker en egen testdatabase (`test_blogg.db`), som lages før hver test 
 | Fil | Hva den tester |
 | --- | --- |
 | `tests/test_db.py` | Integrasjonstester: at funksjonene i `db.py` leser og skriver riktig i databasen |
-| `tests/test_app.py` | Ende til ende tester med Flask sin testklient: sidene, skjemaene, validering, sletting, bekreftelsesmeldinger, 404 og beskyttelse mot script injection |
+| `tests/test_app.py` | Ende til ende tester med Flask sin testklient: sidene, skjemaene, validering, redigering, sletting, bekreftelsesmeldinger, 404 og beskyttelse mot script injection |
 
 ## Sider og HTTP metoder
 
@@ -104,6 +106,8 @@ Testene bruker en egen testdatabase (`test_blogg.db`), som lages før hver test 
 | `/innlegg/<id>/rediger` | POST | Lagrer endringene |
 | `/innlegg/<id>/slett` | GET | Viser siden der man bekrefter sletting |
 | `/innlegg/<id>/slett` | POST | Sletter innlegget og kommentarene til det |
+| `/kommentar/<id>/rediger` | GET | Viser skjemaet for kommentaren, ferdig utfylt |
+| `/kommentar/<id>/rediger` | POST | Lagrer endringene i kommentaren |
 | `/kommentar/<id>/slett` | POST | Sletter en kommentar |
 | `/tag/<navn>` | GET | Viser alle innlegg med en bestemt tag |
 
@@ -157,7 +161,7 @@ tests/            Automatiske tester
 
 ## Validering og sikkerhet
 
-- **Kommentarer:** Tittel og tekst må fylles ut. Tittelen kan ha maks 100 tegn, og teksten maks 1000 tegn.
+- **Kommentarer:** Tittel og tekst må fylles ut. Tittelen kan ha maks 100 tegn, og teksten maks 1000 tegn. Det gjelder både nye og redigerte kommentarer.
 - **Innlegg:** Tittel og tekst må fylles ut. Tittelen kan ha maks 150 tegn.
 - Ved feil vises en feilmelding, det brukeren skrev, blir stående, og serveren svarer med statuskode 400.
 - Alle SQL spørringer bruker parametere (`?`), som beskytter mot SQL injection.
@@ -167,7 +171,7 @@ tests/            Automatiske tester
 
 ## Kjente begrensninger
 
-- Ingen innlogging, så alle kan lage, redigere og slette innlegg.
+- Ingen innlogging, så alle kan lage, redigere og slette innlegg og kommentarer.
 - Ingen beskyttelse mot CSRF.
 - Kommentarer slettes uten en egen side for å bekrefte.
 - Er `SECRET_KEY` ikke satt, brukes en nøkkel som bare er ment for utvikling.
