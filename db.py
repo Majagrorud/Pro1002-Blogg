@@ -153,3 +153,14 @@ def slett_kommentar(kommentar_id):
     con.execute("DELETE FROM kommentarer WHERE id = ?", (kommentar_id,))
     con.commit()
     con.close()
+
+
+def oppdater_kommentar(kommentar_id, tittel, tekst):
+    """Endrer tittel og tekst på en kommentar."""
+    con = hent_tilkobling()
+    con.execute(
+        "UPDATE kommentarer SET tittel = ?, tekst = ? WHERE id = ?",
+        (tittel, tekst, kommentar_id),
+    )
+    con.commit()
+    con.close()

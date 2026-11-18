@@ -58,4 +58,10 @@ class TestDatabase(unittest.TestCase):
     def test_oppdaterer_innlegg(self):
         db.oppdater_innlegg(1, "Ny tittel", "Ny tekst")
         self.assertEqual(db.hent_innlegg(1)["tittel"], "Ny tittel")
-        
+
+
+    def test_oppdaterer_kommentar(self):
+        db.oppdater_kommentar(1, "Ny tittel", "Ny tekst")
+        kommentar = db.hent_kommentar(1)
+        self.assertEqual(kommentar["tittel"], "Ny tittel")
+        self.assertEqual(kommentar["tekst"], "Ny tekst")
