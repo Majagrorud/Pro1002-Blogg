@@ -133,3 +133,26 @@ class TestApp(unittest.TestCase):
     def test_innlegg_har_knapp_for_aa_slette_kommentar(self):
         svar = self.klient.get("/innlegg/1")
         self.assertIn("Slett kommentar", svar.text)
+
+    def test_redigeringsskjema_for_kommentar_er_utfylt(self):
+        svar = self.klient.get("/kommentar/1/rediger")
+        self.assertEqual(svar.status_code, 200)
+        self.assertIn('value="Hundecafe på Løkka"', svar.text)
+
+    def test_rediger_kommentar(self):
+        svar = self.klient.post(
+            "/kommentar/1/rediger",
+            data={"tittel": "Endret tittel", "tekst": "Endret tekst"},
+            follow_redirects=True,
+        )
+        self.assertIn("Kommentaren er oppdatert.", svar.text)
+        self.assertEqual(db.hent_kommentar(1)["tittel"], "Endret tittel")
+
+    def test_tom_kommentar_kan_ikke_lagres_ved_redigering(self):
+        svar = self.klient.post("/kommentar/1/rediger", data={"tittel": "", "tekst": ""})
+        self.assertEqual(svar.status_code, 400)
+        self.assertEqual(db.hent_kommentar(1)["tittel"], "Hundecafe på Løkka")
+
+    def test_innlegg_har_lenke_for_aa_redigere_kommentar(self):
+        svar = self.klient.get("/innlegg/1")
+        self.assertIn("/kommentar/1/rediger", svar.text)
