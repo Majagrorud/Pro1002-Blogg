@@ -36,7 +36,7 @@ class TestApp(unittest.TestCase):
     def test_taggside_viser_riktige_innlegg(self):
         svar = self.klient.get("/tag/pizza")
         self.assertEqual(svar.status_code, 200)
-        self.assertIn("Åpningsfest på Pizza Primitivo", svar.text)
+        self.assertIn("Åpningsfest på Pizza Labben", svar.text)
         self.assertNotIn("Hundekafe på Løkka", svar.text)
 
     def test_ny_kommentar_blir_lagret(self):

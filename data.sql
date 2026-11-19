@@ -4,8 +4,8 @@ INSERT INTO innlegg (id, tittel, dato, tekst) VALUES
 
 Felles for alle stedene er at hunden får vannskål uten at du må spørre. Kafe Pote på Løkka topper lista, tett fulgt av Bistro Bjeffen i Gamlebyen.'),
 
-(2, 'Åpningsfest på Pizza Primitivo', '2026-11-08',
-'Pizza Primitivo i Storgata åpner dørene neste lørdag, og hunder er spesielt invitert til festen.
+(2, 'Åpningsfest på Pizza Labben', '2026-11-08',
+'Pizza Labben i Storgata åpner dørene neste lørdag, og hunder er spesielt invitert til festen.
 
 Det blir smakebiter for tobeinte og hjemmelagde hundekjeks for firbeinte. Surdeigspizzaen med trøffel er verdt turen alene.'),
 
